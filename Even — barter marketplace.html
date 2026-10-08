@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Even</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Hanken+Grotesk:wght@400..600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f4f3; --surface:#fff; --ink:#18201d; --muted:#667470; --line:#dde3e0;
+  --accent:#2b44ff; --accent-ink:#fff; --tl:88%; --tf:25%;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101412; --surface:#171c1a; --ink:#e8eeeb; --muted:#8c9a95; --line:#262e2b;
+    --accent:#8c9aff; --accent-ink:#0b0f1a; --tl:22%; --tf:82%;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101412; --surface:#171c1a; --ink:#e8eeeb; --muted:#8c9a95; --line:#262e2b;
+  --accent:#8c9aff; --accent-ink:#0b0f1a; --tl:22%; --tf:82%;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 'Hanken Grotesk',system-ui,sans-serif}
+h1,h2,h3,.logo,.tile{font-family:'Bricolage Grotesque','Hanken Grotesk',system-ui,sans-serif}
+h1,h2,h3{margin:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0}
+.sub{color:var(--muted);font-size:.9rem}
+b{font-weight:600;display:block}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--line);z-index:1}
+.bar{max-width:720px;margin:auto;padding:12px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:26px;font-weight:800;letter-spacing:-.04em;background:none;border:0;color:var(--ink);cursor:pointer;padding:0}
+nav{display:flex;gap:4px}
+nav button{background:none;border:0;padding:8px 10px;color:var(--muted);font:inherit;font-weight:500;cursor:pointer}
+nav button[aria-current=true]{color:var(--ink);box-shadow:inset 0 -2px var(--accent)}
+
+main{max-width:720px;margin:auto;padding:44px 20px 80px}
+h1{font-size:clamp(2.3rem,8vw,3.8rem);line-height:1;letter-spacing:-.04em;font-weight:800;max-width:12em;margin-bottom:28px}
+h2{font-size:1.9rem;letter-spacing:-.03em;font-weight:700}
+h3{font-size:1.1rem;font-weight:700}
+main h3{margin:32px 0 4px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px}
+
+input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit}
+#q{margin-bottom:12px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.card{display:flex;flex-direction:column;gap:2px;padding:12px;background:var(--surface);color:inherit;font:inherit;text-align:left;
+  border:1px solid var(--line);border-radius:16px}
+.cards>li{display:flex}
+.cards>li>.card{flex:1}
+button.card{cursor:pointer}
+button.card:hover{border-color:var(--accent)}
+.card .tile{width:100%;height:auto;aspect-ratio:4/3;border-radius:10px;font-size:3rem;margin-bottom:10px}
+.card .ghost{margin-top:10px;align-self:flex-start}
+.wants{margin-top:auto;padding-top:10px;font-size:.85rem;color:var(--muted)}
+.wants em{display:block;font-style:normal;font-size:.95rem;color:var(--ink)}
+
+.tile{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:20px;font-weight:700;
+  background:hsl(var(--h) 45% var(--tl));color:hsl(var(--h) 50% var(--tf))}
+
+.primary,.ghost{padding:10px 16px;border-radius:10px;font:inherit;font-weight:600;cursor:pointer}
+.primary{background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent)}
+.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+
+.offer{display:grid;grid-template-columns:auto 1fr;gap:12px 16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.pair{display:flex;align-items:center;gap:6px}
+.pair .tile{width:40px;height:40px;font-size:17px}
+.swap{color:var(--accent);font-weight:700}
+.acts{grid-column:1/-1;display:flex;gap:10px}
+.acts:empty{display:none}
+
+dialog{border:0;border-radius:18px;padding:0;background:var(--surface);color:var(--ink);width:min(440px,calc(100% - 32px));box-shadow:0 20px 60px rgba(0,0,0,.28)}
+dialog::backdrop{background:rgba(10,14,12,.5)}
+.sheet{padding:24px;display:grid;gap:16px}
+fieldset{border:0;padding:0;margin:0}
+legend{font-weight:600;margin-bottom:4px}
+.pick{display:grid;grid-template-columns:auto 48px 1fr;gap:12px;align-items:center;padding:8px 0;cursor:pointer}
+.pick input{width:auto}
+.field{display:grid;gap:6px;font-weight:600}
+.field input{font-weight:400}
+.actions{display:flex;gap:10px;justify-content:flex-end}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <button class="logo" id="home">Even</button>
+    <nav>
+      <button data-view="browse">Browse</button>
+      <button data-view="mine">My items</button>
+      <button data-view="offers">Offers</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="browse">
+    <h1>Trade what you have for what you need.</h1>
+    <input id="q" type="search" placeholder="Search items" aria-label="Search items">
+    <ul id="list" class="cards"></ul>
+  </section>
+
+  <section id="mine" hidden>
+    <div class="head"><h2>My items</h2><button class="primary" id="add">List an item</button></div>
+    <ul id="mineList" class="cards"></ul>
+  </section>
+
+  <section id="offers" hidden>
+    <h2>Offers</h2>
+    <div id="offerList"></div>
+  </section>
+</main>
+
+<dialog id="dlg"></dialog>
+
+<script>
+const KEY = 'even-v1';
+const seed = {
+  items: [
+    {id:1, title:'Film camera (Canon AE-1)', owner:'Ana',   wants:'Bike lights or vinyl records'},
+    {id:2, title:'Acoustic guitar',          owner:'Kofi',  wants:'A bookshelf'},
+    {id:3, title:'Ceramic mug set (4)',      owner:'Mei',   wants:'Houseplants or a mechanical keyboard'},
+    {id:4, title:'Standing desk converter',  owner:'Jonas', wants:'A 24-inch monitor'},
+    {id:5, title:'Cast iron skillet',        owner:'Priya', wants:'Board games'},
+    {id:6, title:'40 paperback novels',      owner:'Ana',   wants:'Anything for the kitchen'},
+    {id:101, title:'Mechanical keyboard',    owner:'You',   wants:'Plants or kitchenware'},
+    {id:102, title:'Road bike',              owner:'You',   wants:'Camera gear'}
+  ],
+  offers: [{id:201, dir:'in', mine:101, theirs:3, status:'pending'}]
+};
+let s;
+try { s = JSON.parse(localStorage.getItem(KEY)); } catch {}
+s = s || seed;
+
+const $ = q => document.querySelector(q);
+const dlg = $('#dlg');
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} };
+const esc = t => String(t).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const item = id => s.items.find(i => i.id === id);
+const tile = i => `<span class="tile" style="--h:${[...i.title].reduce((a, c) => a + c.charCodeAt(0), 0) * 7 % 360}">${esc(i.title[0].toUpperCase())}</span>`;
+
+function show(v) {
+  ['browse', 'mine', 'offers'].forEach(x => { $('#' + x).hidden = x !== v; });
+  document.querySelectorAll('nav button').forEach(b => b.setAttribute('aria-current', b.dataset.view === v));
+}
+
+function renderAll() {
+  const q = $('#q').value.trim().toLowerCase();
+  const found = s.items.filter(i => i.owner !== 'You' && !i.traded && (i.title + i.wants).toLowerCase().includes(q));
+  $('#list').innerHTML = found.map(i =>
+    `<li><button class="card" data-id="${i.id}">${tile(i)}<b>${esc(i.title)}</b><span class="sub">${esc(i.owner)}</span><span class="wants">Wants<em>${esc(i.wants)}</em></span></button></li>`
+  ).join('') || `<li class="sub" style="grid-column:1/-1">No items match “${esc(q)}”.</li>`;
+
+  const mine = s.items.filter(i => i.owner === 'You');
+  $('#mineList').innerHTML = mine.map(i =>
+    `<li class="card">${tile(i)}<b>${esc(i.title)}</b><span class="sub">Wants ${esc(i.wants)}</span>${i.traded ? '<span class="sub">Swapped</span>' : `<button class="ghost" data-rm="${i.id}">Remove</button>`}</li>`
+  ).join('') || `<li class="sub" style="grid-column:1/-1">You haven't listed anything yet. List an item to start trading.</li>`;
+
+  const row = o => {
+    const m = item(o.mine), t = item(o.theirs), pending = o.status === 'pending';
+    const note = pending ? (o.dir === 'in' ? `${esc(t.owner)} sent this offer` : `Waiting on ${esc(t.owner)}`)
+      : {accepted:'Swapped', declined:'Declined', closed:'No longer available'}[o.status];
+    const acts = !pending ? '' : o.dir === 'in'
+      ? `<button class="primary" data-a="accept" data-id="${o.id}">Accept</button><button class="ghost" data-a="decline" data-id="${o.id}">Decline</button>`
+      : `<button class="ghost" data-a="withdraw" data-id="${o.id}">Withdraw</button>`;
+    return `<li class="offer"><span class="pair">${tile(m)}<span class="swap">⇄</span>${tile(t)}</span><span><b>${esc(m.title)} for ${esc(t.title)}</b><span class="sub">${note}</span></span><span class="acts">${acts}</span></li>`;
+  };
+  const group = (title, dir) => {
+    const l = s.offers.filter(o => o.dir === dir);
+    return l.length ? `<h3>${title}</h3><ul>${l.map(row).join('')}</ul>` : '';
+  };
+  $('#offerList').innerHTML = group('Incoming', 'in') + group('Sent', 'out') ||
+    `<p class="sub">No offers yet. Open an item in Browse and offer a swap.</p>`;
+
+  const n = s.offers.filter(o => o.dir === 'in' && o.status === 'pending').length;
+  $('[data-view=offers]').textContent = n ? `Offers (${n})` : 'Offers';
+}
+
+function openSwap(id) {
+  const t = item(id), mine = s.items.filter(i => i.owner === 'You' && !i.traded);
+  dlg.innerHTML = `<div class="sheet">
+    <div class="pair">${tile(t)}<span><b>${esc(t.title)}</b><span class="sub">${esc(t.owner)} wants ${esc(t.wants)}</span></span></div>
+    ${mine.length
+      ? `<fieldset><legend>Offer one of your items</legend>${mine.map((m, k) =>
+          `<label class="pick"><input type="radio" name="m" value="${m.id}" ${k ? '' : 'checked'}>${tile(m)}<span>${esc(m.title)}</span></label>`).join('')}</fieldset>
+        <div class="actions"><button class="ghost" data-close>Cancel</button><button class="primary" id="send">Send offer</button></div>`
+      : `<p>You haven't listed anything yet. List an item, then come back to make an offer.</p>
+        <div class="actions"><button class="ghost" data-close>Cancel</button><button class="primary" id="goAdd">List an item</button></div>`}
+  </div>`;
+  if (mine.length) $('#send').onclick = () => {
+    s.offers.push({id: Date.now(), dir: 'out', mine: +dlg.querySelector('input:checked').value, theirs: t.id, status: 'pending'});
+    save(); dlg.close(); renderAll(); show('offers');
+  };
+  else $('#goAdd').onclick = openAdd;
+  if (!dlg.open) dlg.showModal();
+}
+
+function openAdd() {
+  dlg.innerHTML = `<form class="sheet" id="f">
+    <h3>List an item</h3>
+    <label class="field">What are you listing?<input name="title" required maxlength="60" pattern=".*\\S.*" autocomplete="off"></label>
+    <label class="field">What would you take in return?<input name="wants" required maxlength="80" pattern=".*\\S.*" autocomplete="off"></label>
+    <div class="actions"><button type="button" class="ghost" data-close>Cancel</button><button class="primary">List item</button></div>
+  </form>`;
+  $('#f').onsubmit = e => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    s.items.push({id: Date.now(), title: f.get('title').trim(), owner: 'You', wants: f.get('wants').trim()});
+    save(); dlg.close(); renderAll(); show('mine');
+  };
+  if (!dlg.open) dlg.showModal();
+}
+
+$('#list').onclick = e => { const r = e.target.closest('.card'); if (r) openSwap(+r.dataset.id); };
+$('#mineList').onclick = e => {
+  const b = e.target.closest('[data-rm]'); if (!b) return;
+  const id = +b.dataset.rm;
+  s.items = s.items.filter(i => i.id !== id);
+  s.offers = s.offers.filter(o => o.mine !== id && o.theirs !== id);
+  save(); renderAll();
+};
+$('#offerList').onclick = e => {
+  const b = e.target.closest('[data-a]'); if (!b) return;
+  const o = s.offers.find(x => x.id === +b.dataset.id);
+  if (b.dataset.a === 'accept') {
+    o.status = 'accepted';
+    item(o.mine).traded = item(o.theirs).traded = true;
+    s.offers.forEach(p => { if (p.status === 'pending' && (item(p.mine).traded || item(p.theirs).traded)) p.status = 'closed'; });
+  } else if (b.dataset.a === 'decline') o.status = 'declined';
+  else s.offers = s.offers.filter(x => x !== o);
+  save(); renderAll();
+};
+dlg.onclick = e => { if (e.target === dlg || e.target.closest('[data-close]')) dlg.close(); };
+document.querySelector('nav').onclick = e => { const b = e.target.closest('button'); if (b) show(b.dataset.view); };
+$('#home').onclick = () => show('browse');
+$('#add').onclick = openAdd;
+$('#q').oninput = renderAll;
+
+renderAll();
+show('browse');
+</script>
+</body>
+</html>

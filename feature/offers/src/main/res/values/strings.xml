@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offers_title">Offers</string>
+    <string name="offers_empty">No offers yet. Offers you send or receive will show up here.</string>
+    <string name="offers_incoming">Incoming</string>
+    <string name="offers_sent">Sent</string>
+    <string name="offers_swap_glyph">⇄</string>
+    <string name="offers_for">%1$s for %2$s</string>
+    <string name="offers_accept">Accept</string>
+    <string name="offers_decline">Decline</string>
+    <string name="offers_withdraw">Withdraw</string>
+    <string name="offers_note_sent_to_you">%1$s sent this offer</string>
+    <string name="offers_note_waiting_on">Waiting on %1$s</string>
+    <string name="offers_note_swapped">Swapped</string>
+    <string name="offers_note_declined">Declined</string>
+    <string name="offers_note_closed">No longer available</string>
+    <string name="offers_msg_accepted">Swap confirmed</string>
+    <string name="offers_msg_declined">Offer declined</string>
+    <string name="offers_msg_withdrawn">Offer withdrawn</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_items_title">My items</string>
+    <string name="my_items_add">List an item</string>
+    <string name="my_items_empty">You haven\'t listed anything yet. List an item to start trading.</string>
+    <string name="my_items_wants">Wants %1$s</string>
+    <string name="my_items_swapped">Swapped</string>
+    <string name="my_items_remove">Remove</string>
+    <string name="my_items_dialog_title">List an item</string>
+    <string name="my_items_field_title">What are you listing?</string>
+    <string name="my_items_field_wants">What would you take in return?</string>
+    <string name="my_items_dialog_confirm">List item</string>
+    <string name="my_items_dialog_cancel">Cancel</string>
+    <string name="my_items_removed">Removed %1$s</string>
+    <string name="my_items_remove_dialog_title">Remove %1$s?</string>
+    <plurals name="my_items_remove_dialog_message">
+        <item quantity="one">This also cancels %1$d pending offer, and Undo will not bring it back.</item>
+        <item quantity="other">This also cancels %1$d pending offers, and Undo will not bring them back.</item>
+    </plurals>
+    <string name="action_undo">Undo</string>
+</resources>

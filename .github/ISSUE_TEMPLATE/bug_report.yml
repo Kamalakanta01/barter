@@ -1,0 +1,48 @@
+name: Bug report
+description: Something in Barter does not work as documented.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Android Studio's **File → New Issue** reporter would attach logs automatically.
+
+  - type: input
+    id: version
+    attributes:
+      label: Barter version or commit
+      description: Tag, or the short SHA you built from.
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device and OS
+      description: For example, Pixel 9 on Android 16 (API 36).
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the app
+        2. Tap …
+        3. Crash
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logcat output
+      render: shell

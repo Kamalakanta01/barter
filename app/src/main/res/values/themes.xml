@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose draws the UI; this exists only so the pre-Compose window background matches the app. -->
+    <style name="Theme.Barter" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

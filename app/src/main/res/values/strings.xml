@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Even</string>
+    <string name="tab_browse">Browse</string>
+    <string name="tab_my_items">My items</string>
+    <string name="tab_offers">Offers</string>
+    <string name="tab_offers_count">Offers (%1$d)</string>
+</resources>
