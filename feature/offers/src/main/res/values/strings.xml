@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="offers_title">Offers</string>
-    <string name="offers_empty">No offers yet. Offers you send or receive will show up here.</string>
+    <string name="offers_empty_title">No offers yet</string>
+    <string name="offers_empty">Offers you send or receive will show up here.</string>
     <string name="offers_incoming">Incoming</string>
     <string name="offers_sent">Sent</string>
-    <string name="offers_swap_glyph">⇄</string>
     <string name="offers_for">%1$s for %2$s</string>
     <string name="offers_accept">Accept</string>
     <string name="offers_decline">Decline</string>

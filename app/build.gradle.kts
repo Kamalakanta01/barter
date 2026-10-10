@@ -28,6 +28,9 @@ dependencies {
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.compose)
+    // Installs the baseline profile (src/main/baseline-prof.txt) on devices that did not get it from the
+    // store, so a side-loaded build starts as fast as a store one.
+    implementation(libs.androidx.profileinstaller)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.material3)

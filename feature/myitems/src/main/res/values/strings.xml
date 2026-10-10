@@ -2,7 +2,8 @@
 <resources>
     <string name="my_items_title">My items</string>
     <string name="my_items_add">List an item</string>
-    <string name="my_items_empty">You haven\'t listed anything yet. List an item to start trading.</string>
+    <string name="my_items_empty_title">Nothing listed yet</string>
+    <string name="my_items_empty">List something you would trade, and say what you would take in return.</string>
     <string name="my_items_wants">Wants %1$s</string>
     <string name="my_items_swapped">Swapped</string>
     <string name="my_items_remove">Remove</string>

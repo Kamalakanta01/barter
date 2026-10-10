@@ -13,10 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import dev.barter.feature.myitems.R
 
@@ -42,7 +44,10 @@ fun AddListingDialog(
                     label = { Text(stringResource(R.string.my_items_field_title)) },
                     singleLine = true,
                     shape = MaterialTheme.shapes.small,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Next,
+                    ),
                     colors = fieldColors(),
                 )
                 OutlinedTextField(
@@ -51,6 +56,13 @@ fun AddListingDialog(
                     label = { Text(stringResource(R.string.my_items_field_wants)) },
                     singleLine = true,
                     shape = MaterialTheme.shapes.small,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { if (isValid) onConfirm(title.trim(), wants.trim()) },
+                    ),
                     colors = fieldColors(),
                 )
             }

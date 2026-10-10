@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -24,12 +25,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.barter.core.designsystem.component.EmptyState
+import dev.barter.core.designsystem.component.EvenIcons
 import dev.barter.core.designsystem.component.LetterTile
 import dev.barter.core.designsystem.theme.EvenTheme
 import dev.barter.feature.offers.R
@@ -55,7 +60,11 @@ fun OffersRoute(viewModel: OffersViewModel = hiltViewModel()) {
         }
     }
 
-    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { scaffoldPadding ->
+    // Transparent: the app's one background is painted once, by the shell around every screen.
+    Scaffold(
+        containerColor = Color.Transparent,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { scaffoldPadding ->
         OffersScreen(
             uiState = uiState,
             onAccept = viewModel::onAccept,
@@ -88,10 +97,10 @@ fun OffersScreen(
 
         if (uiState.isEmpty) {
             item {
-                Text(
-                    text = stringResource(R.string.offers_empty),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                EmptyState(
+                    icon = EvenIcons.Swap,
+                    title = stringResource(R.string.offers_empty_title),
+                    body = stringResource(R.string.offers_empty),
                 )
             }
         }
@@ -134,10 +143,11 @@ private fun OfferRowItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LetterTile(text = row.mineTitle, fontSize = 17.sp, modifier = Modifier.size(40.dp))
-            Text(
-                text = stringResource(R.string.offers_swap_glyph),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.titleMedium,
+            // A drawn arrow rather than a text glyph, which older phones may not have a font for.
+            Icon(
+                painter = painterResource(EvenIcons.Swap),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
             )
             LetterTile(text = row.theirsTitle, fontSize = 17.sp, modifier = Modifier.size(40.dp))
         }

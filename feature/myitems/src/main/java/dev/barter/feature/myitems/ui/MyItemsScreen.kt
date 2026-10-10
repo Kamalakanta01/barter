@@ -2,16 +2,12 @@ package dev.barter.feature.myitems.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -32,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.barter.core.designsystem.component.EmptyState
 import dev.barter.core.designsystem.component.EvenCard
+import dev.barter.core.designsystem.component.EvenIcons
 import dev.barter.core.designsystem.component.LetterTile
 import dev.barter.core.designsystem.theme.EvenTheme
 import dev.barter.feature.myitems.R
@@ -64,7 +63,9 @@ fun MyItemsRoute(viewModel: MyItemsViewModel = hiltViewModel()) {
         }
     }
 
+    // Transparent: the app's one background is painted once, by the shell around every screen.
     Scaffold(
+        containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { scaffoldPadding ->
         MyItemsScreen(
@@ -117,41 +118,44 @@ fun MyItemsScreen(
                     text = stringResource(R.string.my_items_title),
                     style = MaterialTheme.typography.headlineSmall,
                 )
-                Button(onClick = onAddClicked, shape = MaterialTheme.shapes.small) {
-                    Text(stringResource(R.string.my_items_add))
+                // With nothing listed, the empty state below carries this button instead.
+                if (uiState.listings.isNotEmpty()) {
+                    Button(onClick = onAddClicked, shape = MaterialTheme.shapes.small) {
+                        Text(stringResource(R.string.my_items_add))
+                    }
                 }
             }
         }
 
         if (uiState.listings.isEmpty()) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = stringResource(R.string.my_items_empty),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                EmptyState(
+                    icon = EvenIcons.Listing,
+                    title = stringResource(R.string.my_items_empty_title),
+                    body = stringResource(R.string.my_items_empty),
+                    action = {
+                        Button(onClick = onAddClicked, shape = MaterialTheme.shapes.small) {
+                            Text(stringResource(R.string.my_items_add))
+                        }
+                    },
                 )
             }
         }
 
         items(uiState.listings, key = MyListing::id) { listing ->
-            Box(Modifier.height(IntrinsicSize.Min)) {
-                MyListingCard(
-                    listing = listing,
-                    onRemove = { onRemove(listing) },
-                    modifier = Modifier.fillMaxHeight(),
-                )
-            }
+            MyListingCard(listing = listing, onRemove = { onRemove(listing) })
         }
     }
 }
 
+/** Fixed line counts keep every card in a row the same height; see ListingCard in Browse. */
 @Composable
 private fun MyListingCard(
     listing: MyListing,
     onRemove: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    EvenCard(modifier = modifier.fillMaxHeight()) {
+    EvenCard(modifier = modifier) {
         LetterTile(
             text = listing.title,
             fontSize = 48.sp,
@@ -164,6 +168,7 @@ private fun MyListingCard(
         Text(
             text = listing.title,
             style = MaterialTheme.typography.titleMedium,
+            minLines = 2,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
@@ -171,11 +176,16 @@ private fun MyListingCard(
             text = stringResource(R.string.my_items_wants, listing.wants),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            minLines = 2,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
-        Spacer(Modifier.weight(1f))
-        Box(modifier = Modifier.padding(top = 10.dp)) {
+        Box(
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .heightIn(min = 40.dp),
+            contentAlignment = Alignment.CenterStart,
+        ) {
             if (listing.isTraded) {
                 Text(
                     text = stringResource(R.string.my_items_swapped),
@@ -202,6 +212,18 @@ private fun MyItemsScreenPreview() {
                     MyListing(102, "Road bike", "Camera gear", isTraded = true),
                 ),
             ),
+            onAddClicked = {},
+            onRemove = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 380)
+@Composable
+private fun MyItemsEmptyPreview() {
+    EvenTheme {
+        MyItemsScreen(
+            uiState = MyItemsUiState(),
             onAddClicked = {},
             onRemove = {},
         )

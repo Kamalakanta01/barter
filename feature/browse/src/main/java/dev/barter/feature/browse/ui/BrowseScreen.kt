@@ -1,14 +1,9 @@
 package dev.barter.feature.browse.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.barter.core.designsystem.component.EmptyState
 import dev.barter.core.designsystem.component.EvenCard
+import dev.barter.core.designsystem.component.EvenIcons
 import dev.barter.core.designsystem.component.LetterTile
 import dev.barter.core.designsystem.theme.EvenTheme
 import dev.barter.feature.browse.R
@@ -45,6 +43,7 @@ fun BrowseRoute(
         uiState = uiState,
         onQueryChange = viewModel::onQueryChange,
         onListingClick = viewModel::onListingClick,
+        onListItem = onListItem,
     )
 
     uiState.swapTarget?.let { target ->
@@ -66,6 +65,7 @@ fun BrowseScreen(
     uiState: BrowseUiState,
     onQueryChange: (String) -> Unit,
     onListingClick: (BrowseListing) -> Unit,
+    onListItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -93,37 +93,44 @@ fun BrowseScreen(
 
         if (uiState.listings.isEmpty()) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = if (uiState.query.isBlank()) {
-                        stringResource(R.string.browse_nothing_yet)
-                    } else {
-                        stringResource(R.string.browse_empty, uiState.query)
-                    },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+                if (uiState.query.isBlank()) {
+                    EmptyState(
+                        icon = EvenIcons.Browse,
+                        title = stringResource(R.string.browse_nothing_title),
+                        body = stringResource(R.string.browse_nothing_yet),
+                        action = {
+                            Button(onClick = onListItem, shape = MaterialTheme.shapes.small) {
+                                Text(stringResource(R.string.browse_list_an_item))
+                            }
+                        },
+                    )
+                } else {
+                    EmptyState(
+                        icon = EvenIcons.Browse,
+                        title = stringResource(R.string.browse_no_match_title),
+                        body = stringResource(R.string.browse_empty, uiState.query),
+                    )
+                }
             }
         }
 
         items(uiState.listings, key = BrowseListing::id) { listing ->
-            Box(Modifier.height(IntrinsicSize.Min)) {
-                ListingCard(
-                    listing = listing,
-                    onClick = { onListingClick(listing) },
-                    modifier = Modifier.fillMaxHeight(),
-                )
-            }
+            ListingCard(listing = listing, onClick = { onListingClick(listing) })
         }
     }
 }
 
+/**
+ * Title and "wants" always take two lines (shorter text leaves a blank line), so every card in a row
+ * is the same height without asking the layout to measure each card twice.
+ */
 @Composable
 private fun ListingCard(
     listing: BrowseListing,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    EvenCard(onClick = onClick, modifier = modifier.fillMaxHeight()) {
+    EvenCard(onClick = onClick, modifier = modifier) {
         LetterTile(
             text = listing.title,
             fontSize = 48.sp,
@@ -136,6 +143,7 @@ private fun ListingCard(
         Text(
             text = listing.title,
             style = MaterialTheme.typography.titleMedium,
+            minLines = 2,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
@@ -143,8 +151,9 @@ private fun ListingCard(
             text = listing.ownerName,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
-        Spacer(Modifier.weight(1f))
         Column(modifier = Modifier.padding(top = 10.dp)) {
             Text(
                 text = stringResource(R.string.browse_wants),
@@ -154,6 +163,7 @@ private fun ListingCard(
             Text(
                 text = listing.wants,
                 style = MaterialTheme.typography.bodyMedium,
+                minLines = 2,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -174,6 +184,20 @@ private fun BrowseScreenPreview() {
             ),
             onQueryChange = {},
             onListingClick = {},
+            onListItem = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 380)
+@Composable
+private fun BrowseEmptyPreview() {
+    EvenTheme {
+        BrowseScreen(
+            uiState = BrowseUiState(),
+            onQueryChange = {},
+            onListingClick = {},
+            onListItem = {},
         )
     }
 }

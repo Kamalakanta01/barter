@@ -4,5 +4,8 @@
     <string name="tab_browse">Browse</string>
     <string name="tab_my_items">My items</string>
     <string name="tab_offers">Offers</string>
-    <string name="tab_offers_count">Offers (%1$d)</string>
+    <plurals name="tab_offers_waiting">
+        <item quantity="one">%1$d offer waiting for your answer</item>
+        <item quantity="other">%1$d offers waiting for your answer</item>
+    </plurals>
 </resources>

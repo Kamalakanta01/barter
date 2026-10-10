@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,18 +35,25 @@ fun LetterTile(
     fontSize: TextUnit,
     cornerRadius: Dp = 12.dp,
 ) {
-    val hue = ((text.sumOf(Char::code) * 7) % 360).toFloat()
+    val backgroundLightness = tileBackgroundLightness
+    val foregroundLightness = tileForegroundLightness
+    // Worked out once per title, not on every redraw while a list scrolls.
+    val (background, foreground) = remember(text, backgroundLightness, foregroundLightness) {
+        val hue = ((text.sumOf(Char::code) * 7) % 360).toFloat()
+        Color.hsl(hue, 0.45f, backgroundLightness) to Color.hsl(hue, 0.50f, foregroundLightness)
+    }
+    val letter = remember(text) { text.take(1).uppercase() }
 
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(cornerRadius))
-            .background(Color.hsl(hue, 0.45f, tileBackgroundLightness))
+            .background(background)
             .clearAndSetSemantics {},
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = text.take(1).uppercase(),
-            color = Color.hsl(hue, 0.50f, tileForegroundLightness),
+            text = letter,
+            color = foreground,
             fontWeight = FontWeight.Bold,
             fontSize = fontSize,
             style = MaterialTheme.typography.titleLarge,

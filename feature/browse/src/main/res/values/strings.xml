@@ -2,8 +2,11 @@
 <resources>
     <string name="browse_hero">Trade what you have for what you need.</string>
     <string name="browse_search_hint">Search items</string>
-    <string name="browse_empty">No items match \"%1$s\".</string>
-    <string name="browse_nothing_yet">Nothing to browse yet. Items listed by other people will show up here.</string>
+    <string name="browse_search_clear">Clear search</string>
+    <string name="browse_nothing_title">Nothing to browse yet</string>
+    <string name="browse_nothing_yet">Items listed by other people will show up here. Meanwhile, list something of your own.</string>
+    <string name="browse_no_match_title">No matches</string>
+    <string name="browse_empty">Nothing matches \"%1$s\". Try a different word.</string>
     <string name="browse_wants">Wants</string>
     <string name="browse_wants_from">%1$s wants %2$s</string>
     <string name="browse_offer_one">Offer one of your items</string>

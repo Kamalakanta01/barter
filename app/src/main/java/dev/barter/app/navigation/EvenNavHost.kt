@@ -1,11 +1,10 @@
 package dev.barter.app.navigation
 
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -38,8 +37,8 @@ fun EvenNavHost(viewModel: EvenViewModel = hiltViewModel()) {
     }
 
     Scaffold(
-        topBar = {
-            EvenTabBar(
+        bottomBar = {
+            EvenNavigationBar(
                 currentRoute = backStackEntry?.destination?.route,
                 pendingIncoming = pendingIncoming,
                 onSelect = selectTab,
@@ -49,12 +48,18 @@ fun EvenNavHost(viewModel: EvenViewModel = hiltViewModel()) {
         NavHost(
             navController = navController,
             startDestination = BROWSE_ROUTE,
+            // The bar already pads for the gesture area, so only the keyboard is added on top.
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .consumeWindowInsets(padding)
-                .imePadding()
-                .windowInsetsPadding(WindowInsets.navigationBars),
+                .imePadding(),
+            // Switching tabs is instant. Cross-fading two whole screens costs real frames on a slow
+            // phone and tells the user nothing the highlighted tab does not already say.
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None },
         ) {
             browseScreen(
                 onListItem = { selectTab(MY_ITEMS_ROUTE) },

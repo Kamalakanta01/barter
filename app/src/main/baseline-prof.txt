@@ -1,0 +1,9 @@
+# Baseline profile: tells Android which of this app's code to compile ahead of time at install.
+#
+# Without it a phone runs the app's code slowly (interpreted) until it has seen it used enough to
+# optimise it, which is exactly when a slow phone feels laggy: first launch and first scroll.
+#
+# The app's own code is small and nearly all of it runs at start-up or on the first screens, so the
+# rule covers all of it. Compose and AndroidX libraries ship their own profiles, which the build merges.
+HSPLdev/barter/**;->**(**)**
+Ldev/barter/**;

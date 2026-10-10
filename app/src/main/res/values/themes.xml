@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Compose draws the UI; this exists only so the pre-Compose window background matches the app. -->
-    <style name="Theme.Barter" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        Compose draws the UI; this theme only decides what the window looks like before Compose has
+        drawn its first frame. It must match the app's background, or users see a white flash on launch.
+        The dark variant lives in values-night/themes.xml.
+    -->
+    <style name="Theme.Barter" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
 </resources>
